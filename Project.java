@@ -181,65 +181,118 @@ public class Tax{
 }
 
 public class Spring{
-	Random rnd=new Random();
-	int event=rnd.nextInt(3);
-	if (event==0)
-		tower.attackPoint+=1;
-	else if (event==1)
-		tax+=100;
-	else{
-		citizen.increaseBerserk();
-		citizen.increaseDiligent();
-		citizen.increaseFearless();
+	public Spring(){
+		Random rnd=new Random();
+		int event=rnd.nextInt(3);
+		if (event==0)
+			tower.attackPoint+=1;
+		else if (event==1)
+			tax+=100;
+		else{
+			citizen.increaseBerserk();
+			citizen.increaseDiligent();
+			citizen.increaseFearless();
+		}
 	}
 }
 
 public class Summer{
-	Random rnd=new Random();
-	int event=rnd.nextInt(3);
-	if (event==0)
-		wall.healthPoint-=50;
-	else if (event==1){
-		citizen.increaseBerserk();
-		citizen.increaseDiligent();
-		citizen.increaseFearless();
-	}
-	else{
-		citizen.increaseEmotional();
-		citizen.increaseNervous();
-		citizen.increaseLazy();
+	public Summer(){
+		Random rnd=new Random();
+		int event=rnd.nextInt(3);
+		if (event==0)
+			wall.healthPoint-=50;
+		else if (event==1){
+			citizen.increaseBerserk();
+			citizen.increaseDiligent();
+			citizen.increaseFearless();
+		}
+		else{
+			citizen.increaseEmotional();
+			citizen.increaseNervous();
+			citizen.increaseLazy();
+		}
 	}
 }
 
 public class Autumn{
-	Random rnd=new Random();
-	int event=rnd.nextInt(3);
-	if (event==0)
-		tower.accuracyPercentage-=20;//during the season
-	else if (event==1)
-		wall.healthPoint-=50;
-	else
-		tax+=100;
+	public Autumn(){
+		Random rnd=new Random();
+		int event=rnd.nextInt(3);
+		if (event==0){
+			tower.accuracyPercentage-=20;
+			temporaryAccurcyPercentageFlag=true;
+		}
+		else if (event==1)
+			wall.healthPoint-=50;
+		else
+			tax+=100;
+	}
 }
 
 public class Winter{
-	Random rnd=new Random();
-	int event=rnd.nextInt(4);
-	if (event==0)
-		wall.healthPoint-=50;
-	else if (event==1){
-		citizen.increaseEmotional();
-		citizen.increaseNervous();
-		citizen.increaseLazy();
+	public Winter(){
+		Random rnd=new Random();
+		int event=rnd.nextInt(4);
+		if (event==0)
+			wall.healthPoint-=50;
+		else if (event==1){
+			citizen.increaseEmotional();
+			citizen.increaseNervous();
+			citizen.increaseLazy();
+		}
+		else if (event==2){
+			tower.accuracyPercentage-=20;
+			temporaryAccurcyPercentageFlag=true;
+		}
+		else
+			tax+=100;
 	}
-	else if (event==2)
-		tower.accuracyPercentage-=20;//during the season
-	else
-		tax+=100;
 }
 
 public class Project{
 	public static Tower tower=new Tower();
 	public static Wall wall=new Wall();
 	public static Citizen citizen=new Citizen();
+	public static Dragon dragon=new Dragon();
+	public static boolean temporaryAccurcyPercentageFlag=false;
+
+	public void dragonAttack(){
+		Random rnd=new Random();
+		boolean dragonAttackSuccess=(rnd.nextInt(101)<=dragon.accuracyPercentage),
+		dragonCriticalAttack=(rnd.nextInt(101)<=dragon.criticalChancePercentage),
+		wallBlockSuccess=(rnd.nextInt(101)<=wall.blockPercentage);
+
+		if (wallBlockSuccess)
+			System.out.println("Wall successfully blocked dragon's attack!\nCurrent Wall's HealthPoint: "+wall.healthPoint);
+		else{
+			if (dragonAttackSuccess && dragonCriticalAttack){
+				int change=(int)dragon.attackPoint*1.0*(1.0+dragon.attackPoint*1.0/100.0);
+				wall.healthPoint-=change;
+				System.out.println("Dragon attacked wall with critical attack!\nWall's HealthPoint minus "+change+"\nCurrent Wall's HealthPoint: "+wall.healthPoint);
+			}
+			if (dragonAttackSuccess){
+				int change=(int)dragon.attackPoint;
+				wall.healthPoint-=change;
+				System.out.println("Dragon attacked our wall\nWall's HealthPoint minus "+change+"\nCurrent Wall's HealthPoint: "+wall.healthPoint);
+			}
+		}
+	}
+
+	public void towerAttack(){
+		Random rnd=new Random();
+		boolean towerAttackSuccess=(rnd.nextInt(101)<=tower.accuracyPercentage),
+		towerCriticalAttack=(rnd.nextInt(101)>=tower.criticalChancePercentage);
+
+		if (towerAttackSuccess && towerCriticalAttack){
+			int change=(int)tower.attackPoint*1.0*(1.0+dragon.attackPoint*1.0/100.0);
+			dragon.healthPoint-=change;
+			System.out.println("Tower attacked dragon with critical attack!\nDragon's HealthPoint minus "+change+"\nCurrent Dragon's HealthPoint: "+dragon.healthPoint);
+		}
+		if (towerAttackSuccess){
+			int change=(int)tower.attackPoint;
+			dragon.healthPoint-=change;
+			System.out.println("Tower attacked dragon!\nDragon's HealthPoint minus "+change+"\nCurrent Dragon's HealthPoint: "+dragon.healthPoint);
+		}
+	}
 }
