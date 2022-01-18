@@ -75,6 +75,15 @@ class Tower extends SameBehavior{
 			System.out.println("Insufficient gold or maximum critical chance percentage reached. Use another option.");
 	}
 
+	public void increaseAccuracyPercentage(){
+		if (this.accuracyPercentage<100  && Project.gold>=100){
+			Project.gold-=100;
+			this.accuracyPercentage+=4;
+		}
+		else
+			System.out.println("Insufficient gold or maximum accuracy percentage reached. Use another option.");
+	}
+
 	public void attack(){
 		Random rnd=new Random();
 		boolean towerAttackSuccess=(rnd.nextInt(101)<=Project.tower.accuracyPercentage),
@@ -90,15 +99,6 @@ class Tower extends SameBehavior{
 			Project.dragon.healthPoint-=change;
 			System.out.println("Tower attacked dragon!\nDragon's HealthPoint minus "+change+"\nCurrent Dragon's HealthPoint: "+Project.dragon.healthPoint);
 		}
-	}
-
-	public void increaseAccuracyPercentage(){
-		if (this.accuracyPercentage<100  && Project.gold>=100){
-			Project.gold-=100;
-			this.accuracyPercentage+=4;
-		}
-		else
-			System.out.println("Insufficient gold or maximum accuracy percentage reached. Use another option.");
 	}
 }
 
@@ -334,23 +334,27 @@ class GameTime{
 			this.seasonNum+=1;
 		switch (this.seasonNum){
 			case 0:
-				season=new Spring();
+				this.season=new Spring();
 				break;
 			case 1:
-				season=new Summer();
+				this.season=new Summer();
 				break;
 			case 2:
-				season=new Autumn();
+				this.season=new Autumn();
 				break;
 			case 3:
-				season=new Winter();
+				this.season=new Winter();
 				break;
 		}
 	}
 }
 
 class CommandLine{
-	public CommandLine(){
+	;
+}
+
+class MainCommandLine extends CommandLine{
+	public MainCommandLine(){
 		System.out.println("Event: "+Project.gameTime.event);
 		System.out.println("Tax reveived from citizens this season: "+Project.tax.taxCollected);
 		System.out.println("Year: "+Project.gameTime.year);
@@ -362,10 +366,38 @@ class CommandLine{
 		System.out.println("4: Dragon");
 		System.out.println("5: I am all ready!");
 		System.out.println("Please enter your command: ");
+
+		Scanner scanner=new Scanner(System.in);
+		int command;
+		String tmp;
+		while (true){
+			tmp=scanner.next();
+			if (scanner.hasNextInt()){
+				command=Integer.parseInt(tmp);
+				if (command>=1 && command <=5)
+					break;	
+			}
+		}
+		switch (command){
+			case 1:
+				Project.commandLine=new TowerCommandLine();
+				break;
+			case 2:
+				Project.commandLine=new WallCommandLine();
+				break;
+			case 3:
+				Project.commandLine=new CitizenCommandLine();
+				break;
+			case 4:
+				Project.commandLine=new DragonCommandLine();
+				break;
+			case 5:
+				break;
+		}
 	}
 }
 
-class TowerCommandLine{
+class TowerCommandLine extends CommandLine{
 	public TowerCommandLine(){
 		System.out.println("Year: "+Project.gameTime.year);
 		System.out.println("Season: "+Project.gameTime.season.name);
@@ -379,10 +411,35 @@ class TowerCommandLine{
 		System.out.println("3: Upgrade Accuracy (100 Gold -> 4% Accuracy)");
 		System.out.println("4: Back to menu");
 		System.out.println("Please enter your command: ");
+
+		Scanner scanner=new Scanner(System.in);
+		int command;
+		while (true){
+			String tmp=scanner.next();
+			if (scanner.hasNextInt()){
+				command=Integer.parseInt(tmp);
+				if (command>=1 && command <=4)
+					break;	
+			}
+		}
+		switch (command){
+			case 1:
+				Project.tower.increaseAttackPoint();
+				break;
+			case 2:
+				Project.tower.increaseCriticalChancePercentage();
+				break;
+			case 3:
+				Project.tower.increaseAccuracyPercentage();
+				break;
+			case 4:
+				Project.commandLine=new MainCommandLine();
+				break;
+		}
 	}
 }
 
-class DragonCommandLine{
+class DragonCommandLine extends CommandLine{
 	public DragonCommandLine(){
 		System.out.println("Year: "+Project.gameTime.year);
 		System.out.println("Season: "+Project.gameTime.season.name);
@@ -395,6 +452,43 @@ class DragonCommandLine{
 	}
 }
 
+class WallCommandLine extends CommandLine{
+	public WallCommandLine(){
+		System.out.println("Year: "+Project.gameTime.year);
+		System.out.println("Season: "+Project.gameTime.season.name);
+		System.out.println("Gold: "+Project.gold);
+		System.out.println("Wall's HealthPoint: "+Project.wall.healthPoint);
+		System.out.println("Wall's Block: "+Project.wall.blockPercentage);
+		System.out.println();
+		System.out.println("1: Upgrade Health (100 Gold -> 75 HealthPoint)");
+		System.out.println("2: Upgrade Block Chance (100 Gold -> 5 Block Chance %)");
+		System.out.println("3: Back to menu");
+		System.out.println("Please enter your command");
+	}
+}
+
+class CitizenCommandLine extends CommandLine{
+	public CitizenCommandLine(){
+		System.out.println("Year: "+Project.gameTime.year);
+		System.out.println("Season: "+Project.gameTime.season.name);
+		System.out.println("Gold: "+Project.gold);
+		System.out.println("Citizen's Emotional (Decrease Tower's AttackPoint by 1): "+Project.citizen.emotional);
+		System.out.println("Citizen's Nervous (Decrease Tower Accuracy Percentage by 5%): "+Project.citizen.nervous);
+		System.out.println("Citizen's Lazy (Decrease Wall's HealthPoint by 100): "+Project.citizen.lazy);
+		System.out.println("Citizen's Berserk (Increase Tower's AttackPoint by 1): "+Project.citizen.berserk);
+		System.out.println("Citizen's Diligent (Increase Wall's HealthPoint by 75): "+Project.citizen.diligent);
+		System.out.println("Citizen's Fearless (Increase Tower's Critical Attack Chance Percentage by 5%): "+Project.citizen.fearless);
+		System.out.println("1: Decrease Emotional (50 Gold -> 50 Emotional Point)");
+		System.out.println("2: Decrease Nervous (50 Gold -> 50 Nervous Point)");
+		System.out.println("3: Decrease Lazy (50 Gold -> 50 Lazy Point)");
+		System.out.println("4: Increase Berserk (50 Gold -> 50 Berserk Point)");
+		System.out.println("5: Increase Diligent (50 Gold -> 50 Diligent Point");
+		System.out.println("6: Increase Fearless (50 Gold -> 50 Fearless Point)");
+		System.out.println("7: Back to menu");
+		System.out.println("Please enter your command: ");
+	}
+}
+
 class Project{
 	public static Tower tower=new Tower();
 	public static Wall wall=new Wall();
@@ -404,8 +498,10 @@ class Project{
 	public static Tax tax=new Tax();
 	public static GameTime gameTime=new GameTime();
 	public static int gold=200;
+	public static CommandLine commandLine;
 	
 	public static void main(String[] args) {
+		commandLine=new MainCommandLine();
 		System.out.println("Welcome to Till The End - A tower Defense Game!");
 		System.out.println("A dragon performs a sudden attack to your city!");
 		System.out.println("Dragon's Level: "+dragon.level);
