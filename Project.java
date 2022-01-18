@@ -58,8 +58,8 @@ class Tower extends SameBehavior{
 	public int criticalChancePercentage=10;
 
 	public void increaseAttackPoint(){
-		if (Tax.tax>=100){
-			Tax.tax-=100;
+		if (Project.gold>=100){
+			Project.gold-=100;
 			this.attackPoint+=1;
 		}
 		else
@@ -67,8 +67,8 @@ class Tower extends SameBehavior{
 	}
 
 	public void increaseCriticalChancePercentage(){
-		if (this.criticalChancePercentage<50  && Tax.tax>=100){
-			Tax.tax-=100;
+		if (this.criticalChancePercentage<50  && Project.gold>=100){
+			Project.gold-=100;
 			this.criticalChancePercentage+=5;
 		}
 		else
@@ -93,8 +93,8 @@ class Tower extends SameBehavior{
 	}
 
 	public void increaseAccuracyPercentage(){
-		if (this.accuracyPercentage<100  && Tax.tax>=100){
-			Tax.tax-=100;
+		if (this.accuracyPercentage<100  && Project.gold>=100){
+			Project.gold-=100;
 			this.accuracyPercentage+=4;
 		}
 		else
@@ -107,15 +107,15 @@ class Wall{
 	public int blockPercentage=10;
 
 	public void increaseHealthPoint(){
-		if (Tax.tax>=100){
-			Tax.tax-=100;
+		if (Project.gold>=100){
+			Project.gold-=100;
 			this.healthPoint+=75;
 		}
 	}
 
 	public void increaseBlockPercentage(){
-		if (this.blockPercentage<50 && Tax.tax>=100){
-			Tax.tax-=100;
+		if (this.blockPercentage<50 && Project.gold>=100){
+			Project.gold-=100;
 			this.blockPercentage+=5;
 		}
 		else{
@@ -133,22 +133,22 @@ class Citizen{
 	public int fearless=10;
 
 	public void decreaseEmotional(){
-		if(emotional>=50 && Tax.tax>=50){
-			Tax.tax-=50;
+		if(emotional>=50 && Project.gold>=50){
+			Project.gold-=50;
 			emotional-=50;
 		}
 	}
 	
 	public void decreaseNervous(){
-		if(nervous>=50 && Tax.tax>=50){
-			Tax.tax-=50;
+		if(nervous>=50 && Project.gold>=50){
+			Project.gold-=50;
 			nervous-=50;
 		}
 	}
 	
 	public void decreaseLazy(){
-		if(lazy>=50 && Tax.tax>=50){
-			Tax.tax-=50;
+		if(lazy>=50 && Project.gold>=50){
+			Project.gold-=50;
 			lazy-=50;
 		}
 	}
@@ -178,8 +178,8 @@ class Citizen{
 	}
 
 	public void increaseBerserk(){
-		if (Tax.tax>=50){
-			Tax.tax-=50;
+		if (Project.gold>=50){
+			Project.gold-=50;
 			berserk+=50;
 		}
 		if (berserk>=100){
@@ -189,8 +189,8 @@ class Citizen{
 	}
 
 	public void increaseDiligent(){
-		if (Tax.tax>=50){
-			Tax.tax-=50;
+		if (Project.gold>=50){
+			Project.gold-=50;
 			diligent+=50;
 		}
 		if (diligent>=100){
@@ -200,8 +200,8 @@ class Citizen{
 	}
 
 	public void increaseFearless(){
-		if (Tax.tax>=50){
-			Tax.tax-=50;
+		if (Project.gold>=50){
+			Project.gold-=50;
 			fearless+=50;
 		}
 		if (fearless>=100){
@@ -212,15 +212,21 @@ class Citizen{
 }
 
 class Tax{
-	public static int tax=200;
-	
+	public int taxCollected;
+
 	public void collectTax(){
 		Random rnd=new Random();
-		tax+=new int[] {200,250,300,350,400}[rnd.nextInt(5)];
+		taxCollected=new int[] {200,250,300,350,400}[rnd.nextInt(5)];
+		Project.gold+=taxCollected;
 	}
 }
 
-class Spring{
+class Season{
+	public String name;
+}
+
+class Spring extends Season{
+	public String name="Spring";
 	public Spring(){
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
@@ -229,7 +235,7 @@ class Spring{
 			Project.gameTime.event="Reinforcement arrived! Tower's AttackPoint increased by 1!";
 		}
 		else if (event==1){
-			Tax.tax+=100;
+			Project.gold+=100;
 			Project.gameTime.event="Visitors arrived! You get 100 gold!";
 		}
 		else{
@@ -241,7 +247,8 @@ class Spring{
 	}
 }
 
-class Summer{
+class Summer extends Season{
+	public String name="Summer";
 	public Summer(){
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
@@ -264,7 +271,8 @@ class Summer{
 	}
 }
 
-class Autumn{
+class Autumn extends Season{
+	public String name="Autumn";
 	public Autumn(){
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
@@ -278,13 +286,14 @@ class Autumn{
 			Project.gameTime.event="Flood! Wall's HealthPoint decreased by 50!";
 		}
 		else{
-			Tax.tax+=100;
+			Project.gold+=100;
 			Project.gameTime.event="Harvest! You get 100 gold!";
 		}
 	}
 }
 
-class Winter{
+class Winter extends Season{
+	public String name="Winter";
 	public Winter(){
 		Random rnd=new Random();
 		int event=rnd.nextInt(4);
@@ -304,31 +313,85 @@ class Winter{
 			Project.gameTime.event="Hunger! Tower's AccuracyPercentage decreased by 20 during the season!";
 		}
 		else{
-			Tax.tax+=100;
+			Project.gold+=100;
 			Project.gameTime.event="Tour group arrived! You get 100 gold!";
 		}
 	}
 }
 
 class GameTime{
-	public String[] seasons=new String[]{"Spring", "Summer", "Autumn", "Winter"};
 	public int year=1;
-	public int season=0;
+	public int seasonNum=0;
 	public String event;
+	public Season season;
 
 	public void updateGameTime(){
-		if (this.season==3){
+		if (this.seasonNum==3){
 			this.year+=1;
-			this.season=0;
+			this.seasonNum=0;
 		}
 		else
-			this.season+=1;
+			this.seasonNum+=1;
+		switch (this.seasonNum){
+			case 0:
+				season=new Spring();
+				break;
+			case 1:
+				season=new Summer();
+				break;
+			case 2:
+				season=new Autumn();
+				break;
+			case 3:
+				season=new Winter();
+				break;
+		}
 	}
 }
 
 class CommandLine{
-	public CommandLine(int change){
+	public CommandLine(){
+		System.out.println("Event: "+Project.gameTime.event);
+		System.out.println("Tax reveived from citizens this season: "+Project.tax.taxCollected);
+		System.out.println("Year: "+Project.gameTime.year);
+		System.out.println("Season: "+Project.gameTime.season.name);
+		System.out.println("Gold: "+Project.gold);
+		System.out.println("1: Tower");
+		System.out.println("2: Wall");
+		System.out.println("3: Citizens");
+		System.out.println("4: Dragon");
+		System.out.println("5: I am all ready!");
+		System.out.println("Please enter your command: ");
+	}
+}
 
+class TowerCommandLine{
+	public TowerCommandLine(){
+		System.out.println("Year: "+Project.gameTime.year);
+		System.out.println("Season: "+Project.gameTime.season.name);
+		System.out.println("Gold: "+Project.gold);
+		System.out.println("Tower's AttackPoint: "+Project.tower.attackPoint);
+		System.out.println("Tower's Critical Chance: "+Project.tower.criticalChancePercentage);
+		System.out.println("Tower's Accuracy: "+Project.tower.accuracyPercentage);
+		System.out.println();
+		System.out.println("1: Upgrade Attack (100 Gold -> 1 AttackPoint)");
+		System.out.println("2: Upgrade Critical Chance (100 Gold -> 5 Critical Chance %)");
+		System.out.println("3: Upgrade Accuracy (100 Gold -> 4% Accuracy)");
+		System.out.println("4: Back to menu");
+		System.out.println("Please enter your command: ");
+	}
+}
+
+class DragonCommandLine{
+	public DragonCommandLine(){
+		System.out.println("Year: "+Project.gameTime.year);
+		System.out.println("Season: "+Project.gameTime.season.name);
+		System.out.println("Gold: "+Project.gold);
+		System.out.println("Dragon's Level: "+Project.dragon.level);
+		System.out.println("Dragon's HealthPoint: "+Project.dragon.healthPoint);
+		System.out.println("Dragon's AttackPoint: "+Project.dragon.attackPoint);
+		System.out.println("Dragon's Critical Chance: "+Project.dragon.criticalChancePercentage);
+		System.out.println("Dragon's Accuracy: "+Project.dragon.accuracyPercentage);
 	}
 }
 
@@ -340,6 +403,7 @@ class Project{
 	public static boolean temporaryAccurcyPercentageFlag=false;
 	public static Tax tax=new Tax();
 	public static GameTime gameTime=new GameTime();
+	public static int gold=200;
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Till The End - A tower Defense Game!");
