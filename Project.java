@@ -141,80 +141,80 @@ class Citizen{
 	public int fearless=10;
 
 	public void decreaseEmotional(){
-		if(emotional>=50 && Project.gold>=50){
+		if(this.emotional>=50 && Project.gold>=50){
 			Project.gold-=50;
-			emotional-=50;
+			this.emotional-=50;
 		}
 	}
 	
 	public void decreaseNervous(){
-		if(nervous>=50 && Project.gold>=50){
+		if(this.nervous>=50 && Project.gold>=50){
 			Project.gold-=50;
-			nervous-=50;
+			this.nervous-=50;
 		}
 	}
 	
 	public void decreaseLazy(){
-		if(lazy>=50 && Project.gold>=50){
+		if(this.lazy>=50 && Project.gold>=50){
 			Project.gold-=50;
-			lazy-=50;
+			this.lazy-=50;
 		}
 	}
 
 	public void increaseEmotional(){
-		emotional+=50;
-		if (emotional>=100){
+		this.emotional+=50;
+		if (this.emotional>=100){
 			Project.tower.attackPoint-=1;
-			emotional-=100;
+			this.emotional-=100;
 		}
 	}
 
 	public void increaseNervous(){
-		nervous+=50;
-		if (nervous>=100){
+		this.nervous+=50;
+		if (this.nervous>=100){
 			Project.tower.accuracyPercentage-=5;
-			nervous-=100;
+			this.nervous-=100;
 		}
 	}
 
 	public void increaseLazy(){
-		lazy+=50;
-		if (lazy>=100){
+		this.lazy+=50;
+		if (this.lazy>=100){
 			Project.wall.healthPoint-=100;
-			lazy-=100;
+			this.lazy-=100;
 		}
 	}
 
 	public void increaseBerserk(){
 		if (Project.gold>=50){
 			Project.gold-=50;
-			berserk+=50;
+			this.berserk+=50;
 		}
-		if (berserk>=100){
+		if (this.berserk>=100){
 			Project.tower.attackPoint+=1;
-			berserk-=100;
+			this.berserk-=100;
 		}
 	}
 
 	public void increaseDiligent(){
 		if (Project.gold>=50){
 			Project.gold-=50;
-			diligent+=50;
+			this.diligent+=50;
 		}
-		if (diligent>=100){
+		if (this.diligent>=100){
 			Project.wall.healthPoint+=75;
-			diligent-=100;
+			this.diligent-=100;
 		}
 	}
 
 	public void increaseFearless(){
 		if (Project.gold>=50){
 			Project.gold-=50;
-			fearless+=50;
+			this.fearless+=50;
 		}
-		if (fearless>=100){
+		if (this.fearless>=100){
 			Project.tower.criticalChancePercentage+=5;
-			fearless-=100;
+			this.fearless-=100;
 		}
 	}
 }
@@ -224,7 +224,7 @@ class Tax{
 
 	public void collectTax(){
 		Random rnd=new Random();
-		taxCollected=new int[] {200,250,300,350,400}[rnd.nextInt(5)];
+		this.taxCollected=new int[] {200,250,300,350,400}[rnd.nextInt(5)];
 		Project.gold+=taxCollected;
 	}
 }
@@ -403,7 +403,7 @@ class MainCommandLine extends CommandLine{
 			case 4:
 				Project.commandLine=new DragonCommandLine();
 				break;
-			case 5:
+			case 5:											//need to implement this
 				break;
 		}
 	}
@@ -567,7 +567,7 @@ public class Project{
 	public static Wall wall=new Wall();
 	public static Citizen citizen=new Citizen();
 	public static Dragon dragon=new Dragon();
-	public static boolean temporaryAccurcyPercentageFlag=false;
+	public static boolean temporaryAccurcyPercentageFlag=false;	//need to implement this
 	public static Tax tax=new Tax();
 	public static GameTime gameTime=new GameTime();
 	public static int gold=200;
@@ -577,24 +577,46 @@ public class Project{
 		gameTime.updateGameTime();
 		dragon.displayInfo();
 		commandLine=new MainCommandLine();
+		int cnt=0;
+
+		while (true){
+			if (cnt%20==0){
+				tax.collectTax();
+				gameTime.updateGameTime();
+				commandLine=new CommandLine();
+			}
+			checkStatus();
+			if (cnt%2==0)
+				dragon.attack();
+			else
+				tower.attack();
+			cnt+=1;
+		}
 	}
 
-	public static boolean win(){
-		if (dragon.healthPoint<=0)
-			return true;
-		else
-			return false;
-	}
+	public static void checkStatus(){
+		if (dragon.healthPoint<=0){
+			System.out.println("Congrats, you have won! The dragon's HealthPoint is "+dragon.healthPoint);
+			System.out.println("Press any key to exit the game!");
 
-	public static boolean lose(){
-		if (wall.healthPoint<=0)
-			return true;
-		else
-			return false;
+			Scanner scanner=new Scanner(System.in);
+			String inp=scanner.next();
+			System.exit(0);
+		}
+
+		if (wall.healthPoint<=0){
+			System.out.println("Oh no, you lost! Your wall's HealthPoint is "+wall.healthPoint);
+			System.out.println("Press any key to exit the game!");
+
+			Scanner scanner=new Scanner(System.in);
+			String inp=scanner.next();
+			System.exit(0);
+		}
 	}
 
 	public static void main(String[] args){
 		System.out.println("Welcome to Till The End - A tower Defense Game!");
 		System.out.println("A dragon performs a sudden attack to your city!");
+		game();
 	}
 }
