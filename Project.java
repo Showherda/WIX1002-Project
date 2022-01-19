@@ -51,6 +51,14 @@ class Dragon extends SameBehavior{
 		this.attackPoint+=1;
 		this.increaseCriticalChancePercentage();
 	}
+
+	public void displayInfo(){
+		System.out.println("Dragon's Level: "+this.level);
+		System.out.println("Dragon's HealthPoint: "+this.healthPoint);
+		System.out.println("Dragon's AttackPoint: "+this.attackPoint);
+		System.out.println("Dragon's Critical Chance: "+this.criticalChancePercentage);
+		System.out.println("Dragon's Accuracy: "+this.accuracyPercentage);
+	}
 }
 
 class Tower extends SameBehavior{
@@ -321,7 +329,7 @@ class Winter extends Season{
 
 class GameTime{
 	public int year=1;
-	public int seasonNum=0;
+	public int seasonNum=-1;
 	public String event;
 	public Season season;
 
@@ -347,6 +355,11 @@ class GameTime{
 				break;
 		}
 	}
+
+	public void displayInfo(){
+		System.out.println("Year: "+Project.gameTime.year);
+		System.out.println("Season: "+Project.gameTime.season.name);
+	}
 }
 
 class CommandLine{
@@ -357,8 +370,7 @@ class MainCommandLine extends CommandLine{
 	public MainCommandLine(){
 		System.out.println("Event: "+Project.gameTime.event);
 		System.out.println("Tax reveived from citizens this season: "+Project.tax.taxCollected);
-		System.out.println("Year: "+Project.gameTime.year);
-		System.out.println("Season: "+Project.gameTime.season.name);
+		Project.gameTime.displayInfo();
 		System.out.println("Gold: "+Project.gold);
 		System.out.println("1: Tower");
 		System.out.println("2: Wall");
@@ -399,8 +411,7 @@ class MainCommandLine extends CommandLine{
 
 class TowerCommandLine extends CommandLine{
 	public TowerCommandLine(){
-		System.out.println("Year: "+Project.gameTime.year);
-		System.out.println("Season: "+Project.gameTime.season.name);
+		Project.gameTime.displayInfo();
 		System.out.println("Gold: "+Project.gold);
 		System.out.println("Tower's AttackPoint: "+Project.tower.attackPoint);
 		System.out.println("Tower's Critical Chance: "+Project.tower.criticalChancePercentage);
@@ -441,21 +452,28 @@ class TowerCommandLine extends CommandLine{
 
 class DragonCommandLine extends CommandLine{
 	public DragonCommandLine(){
-		System.out.println("Year: "+Project.gameTime.year);
-		System.out.println("Season: "+Project.gameTime.season.name);
+		Project.gameTime.displayInfo();
 		System.out.println("Gold: "+Project.gold);
-		System.out.println("Dragon's Level: "+Project.dragon.level);
-		System.out.println("Dragon's HealthPoint: "+Project.dragon.healthPoint);
-		System.out.println("Dragon's AttackPoint: "+Project.dragon.attackPoint);
-		System.out.println("Dragon's Critical Chance: "+Project.dragon.criticalChancePercentage);
-		System.out.println("Dragon's Accuracy: "+Project.dragon.accuracyPercentage);
+		Project.dragon.displayInfo();
+		System.out.println("1: Back to menu");
+		System.out.println("Please enter your command: ");
+
+		Scanner scanner=new Scanner(System.in);
+		int command;
+		while (true){
+			String tmp=scanner.next();
+			if (scanner.hasNextInt()){
+				command=Integer.parseInt(tmp);
+				if (command==1)
+					Project.commandLine=new MainCommandLine();
+			}
+		}
 	}
 }
 
 class WallCommandLine extends CommandLine{
 	public WallCommandLine(){
-		System.out.println("Year: "+Project.gameTime.year);
-		System.out.println("Season: "+Project.gameTime.season.name);
+		Project.gameTime.displayInfo();
 		System.out.println("Gold: "+Project.gold);
 		System.out.println("Wall's HealthPoint: "+Project.wall.healthPoint);
 		System.out.println("Wall's Block: "+Project.wall.blockPercentage);
@@ -491,8 +509,7 @@ class WallCommandLine extends CommandLine{
 
 class CitizenCommandLine extends CommandLine{
 	public CitizenCommandLine(){
-		System.out.println("Year: "+Project.gameTime.year);
-		System.out.println("Season: "+Project.gameTime.season.name);
+		Project.gameTime.displayInfo();
 		System.out.println("Gold: "+Project.gold);
 		System.out.println("Citizen's Emotional (Decrease Tower's AttackPoint by 1): "+Project.citizen.emotional);
 		System.out.println("Citizen's Nervous (Decrease Tower Accuracy Percentage by 5%): "+Project.citizen.nervous);
@@ -556,16 +573,28 @@ public class Project{
 	public static int gold=200;
 	public static CommandLine commandLine;
 
-	public static void main(String[] args) {
+	public static void game(){
+		gameTime.updateGameTime();
+		dragon.displayInfo();
 		commandLine=new MainCommandLine();
-		gameTime.season=new Spring();
+	}
+
+	public static boolean win(){
+		if (dragon.healthPoint<=0)
+			return true;
+		else
+			return false;
+	}
+
+	public static boolean lose(){
+		if (wall.healthPoint<=0)
+			return true;
+		else
+			return false;
+	}
+
+	public static void main(String[] args){
 		System.out.println("Welcome to Till The End - A tower Defense Game!");
 		System.out.println("A dragon performs a sudden attack to your city!");
-		System.out.println("Dragon's Level: "+dragon.level);
-		System.out.println("Dragon's HealthPoint: "+dragon.healthPoint);
-		System.out.println("Dragon's AttackPoint: "+dragon.attackPoint);
-		System.out.println("Dragon's Critical Chance: "+dragon.criticalChancePercentage);
-		System.out.println("Dragon's Accuracy: "+dragon.accuracyPercentage);
-
 	}
 }
