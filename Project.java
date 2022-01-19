@@ -463,7 +463,29 @@ class WallCommandLine extends CommandLine{
 		System.out.println("1: Upgrade Health (100 Gold -> 75 HealthPoint)");
 		System.out.println("2: Upgrade Block Chance (100 Gold -> 5 Block Chance %)");
 		System.out.println("3: Back to menu");
-		System.out.println("Please enter your command");
+		System.out.println("Please enter your command: ");
+
+		Scanner scanner=new Scanner(System.in);
+		int command;
+		while (true){
+			String tmp=scanner.next();
+			if (scanner.hasNextInt()){
+				command=Integer.parseInt(tmp);
+				if (command>=1 && command <=3)
+					break;	
+			}
+		}
+		switch (command){
+			case 1:
+				Project.wall.increaseHealthPoint();
+				break;
+			case 2:
+				Project.wall.increaseBlockPercentage();
+				break;
+			case 3:
+				Project.commandLine=new MainCommandLine();
+				break;
+		}
 	}
 }
 
@@ -486,6 +508,40 @@ class CitizenCommandLine extends CommandLine{
 		System.out.println("6: Increase Fearless (50 Gold -> 50 Fearless Point)");
 		System.out.println("7: Back to menu");
 		System.out.println("Please enter your command: ");
+
+		Scanner scanner=new Scanner(System.in);
+		int command;
+		while (true){
+			String tmp=scanner.next();
+			if (scanner.hasNextInt()){
+				command=Integer.parseInt(tmp);
+				if (command>=1 && command <=7)
+					break;	
+			}
+		}
+		switch (command){
+			case 1:
+				Project.citizen.decreaseEmotional();
+				break;
+			case 2:
+				Project.citizen.decreaseNervous();
+				break;
+			case 3:
+				Project.citizen.decreaseLazy();
+				break;
+			case 4:
+				Project.citizen.increaseBerserk();
+				break;
+			case 5:
+				Project.citizen.increaseDiligent();
+				break;
+			case 6:
+				Project.citizen.increaseFearless();
+				break;
+			case 7:
+				Project.commandLine=new MainCommandLine();
+				break;
+		}
 	}
 }
 
