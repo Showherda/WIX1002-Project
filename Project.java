@@ -489,7 +489,7 @@ class CitizenCommandLine extends CommandLine{
 	}
 }
 
-class Project{
+public class Project{
 	public static Tower tower=new Tower();
 	public static Wall wall=new Wall();
 	public static Citizen citizen=new Citizen();
@@ -499,9 +499,10 @@ class Project{
 	public static GameTime gameTime=new GameTime();
 	public static int gold=200;
 	public static CommandLine commandLine;
-	
+
 	public static void main(String[] args) {
 		commandLine=new MainCommandLine();
+		gameTime.season=new Spring();
 		System.out.println("Welcome to Till The End - A tower Defense Game!");
 		System.out.println("A dragon performs a sudden attack to your city!");
 		System.out.println("Dragon's Level: "+dragon.level);
