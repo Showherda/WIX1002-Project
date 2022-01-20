@@ -231,11 +231,14 @@ class Tax{
 
 class Season{
 	public String name;
+	public Season(String name){
+		this.name=name;
+	}
 }
 
 class Spring extends Season{
-	public String name="Spring";
 	public Spring(){
+		super("Spring");
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
 		if (event==0){
@@ -247,17 +250,17 @@ class Spring extends Season{
 			Project.gameTime.event="Visitors arrived! You get 100 gold!";
 		}
 		else{
-			Project.citizen.increaseBerserk();
-			Project.citizen.increaseDiligent();
-			Project.citizen.increaseFearless();
+			Project.citizen.berserk+=50;
+			Project.citizen.diligent+=50;
+			Project.citizen.fearless+=50;
 			Project.gameTime.event="Festival! Citizen's Berserk, Diligent and Fearless point increased by 50!";
 		}
 	}
 }
 
 class Summer extends Season{
-	public String name="Summer";
 	public Summer(){
+		super("Summer");
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
 		if (event==0){
@@ -265,23 +268,23 @@ class Summer extends Season{
 			Project.gameTime.event="Drought! Wall's HealthPoint decreased by 50!";
 		}
 		else if (event==1){
-			Project.citizen.increaseBerserk();
-			Project.citizen.increaseDiligent();
-			Project.citizen.increaseFearless();
+			Project.citizen.berserk+=50;
+			Project.citizen.diligent+=50;
+			Project.citizen.fearless+=50;
 			Project.gameTime.event="Outing! Citizen's Berserk, Diligent and Fearless point increased by 50!";
 		}
 		else{
-			Project.citizen.increaseEmotional();
-			Project.citizen.increaseNervous();
-			Project.citizen.increaseLazy();
+			Project.citizen.emotional+=50;
+			Project.citizen.nervous+=50;
+			Project.citizen.lazy+=50;
 			Project.gameTime.event="Heatstroke! Citizen's Emotional, Nervous and Lazy point increased by 50!";
 		}
 	}
 }
 
 class Autumn extends Season{
-	public String name="Autumn";
 	public Autumn(){
+		super("Autumn");
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
 		if (event==0){
@@ -301,8 +304,8 @@ class Autumn extends Season{
 }
 
 class Winter extends Season{
-	public String name="Winter";
 	public Winter(){
+		super("Winter");
 		Random rnd=new Random();
 		int event=rnd.nextInt(4);
 		if (event==0){
@@ -310,9 +313,9 @@ class Winter extends Season{
 			Project.gameTime.event="Blizzard! Wall's HealthPoint decreased by 50!";
 		}
 		else if (event==1){
-			Project.citizen.increaseEmotional();
-			Project.citizen.increaseNervous();
-			Project.citizen.increaseLazy();
+			Project.citizen.emotional+=50;
+			Project.citizen.nervous=50;
+			Project.citizen.lazy+=50;
 			Project.gameTime.event="Avalanche! Citizen's Emotional, Nervous and Lazy point increased by 50!";
 		}
 		else if (event==2){
@@ -574,10 +577,11 @@ public class Project{
 	public static CommandLine commandLine;
 
 	public static void game(){
+		tax.collectTax();
 		gameTime.updateGameTime();
 		dragon.displayInfo();
 		commandLine=new MainCommandLine();
-		int cnt=0;
+		int cnt=1;
 
 		while (true){
 			if (cnt%20==0){
