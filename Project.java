@@ -386,11 +386,17 @@ class MainCommandLine extends CommandLine{
 		int command;
 		String tmp;
 		while (true){
-			tmp=scanner.next();
 			if (scanner.hasNextInt()){
+				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=5)
-					break;	
+					break;
+				else
+					System.out.println("Enter an integer between 1 and 5");
+			}
+			else{
+				tmp=scanner.next();
+				System.out.println("Enter an integer between 1 and 5");
 			}
 		}
 		switch (command){
@@ -428,12 +434,19 @@ class TowerCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
+		String tmp;
 		while (true){
-			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
+				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=4)
-					break;	
+					break;
+				else
+					System.out.println("Enter an integer between 1 and 4");
+			}
+			else{
+				tmp=scanner.next();
+				System.out.println("Enter an integer between 1 and 4");
 			}
 		}
 		switch (command){
@@ -463,12 +476,19 @@ class DragonCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
+		String tmp;
 		while (true){
-			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
+				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command==1)
 					Project.commandLine=new MainCommandLine();
+				else
+					System.out.println("Enter 1");
+			}
+			else{
+				tmp=scanner.next();
+				System.out.println("Enter 1");
 			}
 		}
 	}
@@ -488,12 +508,19 @@ class WallCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
+		String tmp;
 		while (true){
-			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
+				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=3)
-					break;	
+					break;
+				else
+					System.out.println("Enter an integer between 1 and 5");
+			}
+			else{
+				tmp=scanner.next();
+				System.out.println("Enter an integer between 1 and 3");
 			}
 		}
 		switch (command){
@@ -531,12 +558,19 @@ class CitizenCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
+		String tmp;
 		while (true){
-			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
+				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=7)
-					break;	
+					break;
+				else
+					System.out.println("Enter an integer between 1 and 5");
+			}
+			else{
+				tmp=scanner.next();
+				System.out.println("Enter an integer between 1 and 7");
 			}
 		}
 		switch (command){
