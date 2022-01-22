@@ -452,12 +452,15 @@ class TowerCommandLine extends CommandLine{
 		switch (command){
 			case 1:
 				Project.tower.increaseAttackPoint();
+				Project.commandLine=new TowerCommandLine();
 				break;
 			case 2:
 				Project.tower.increaseCriticalChancePercentage();
+				Project.commandLine=new TowerCommandLine();
 				break;
 			case 3:
 				Project.tower.increaseAccuracyPercentage();
+				Project.commandLine=new TowerCommandLine();
 				break;
 			case 4:
 				Project.commandLine=new MainCommandLine();
@@ -526,9 +529,11 @@ class WallCommandLine extends CommandLine{
 		switch (command){
 			case 1:
 				Project.wall.increaseHealthPoint();
+				Project.commandLine=new WallCommandLine();
 				break;
 			case 2:
 				Project.wall.increaseBlockPercentage();
+				Project.commandLine=new WallCommandLine();
 				break;
 			case 3:
 				Project.commandLine=new MainCommandLine();
@@ -576,21 +581,27 @@ class CitizenCommandLine extends CommandLine{
 		switch (command){
 			case 1:
 				Project.citizen.decreaseEmotional();
+				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 2:
 				Project.citizen.decreaseNervous();
+				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 3:
 				Project.citizen.decreaseLazy();
+				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 4:
 				Project.citizen.increaseBerserk();
+				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 5:
 				Project.citizen.increaseDiligent();
+				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 6:
 				Project.citizen.increaseFearless();
+				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 7:
 				Project.commandLine=new MainCommandLine();
@@ -621,7 +632,7 @@ public class Project{
 			if (cnt%20==0){
 				tax.collectTax();
 				gameTime.updateGameTime();
-				commandLine=new CommandLine();
+				commandLine=new MainCommandLine();
 			}
 			checkStatus();
 			if (cnt%2==0)
