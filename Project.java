@@ -357,6 +357,9 @@ class GameTime{
 				this.season=new Winter();
 				break;
 		}
+
+		if (Project.temporaryAccurcyPercentageFlag)
+			Project.tower.accuracyPercentage+=20;
 	}
 
 	public void displayInfo(){
@@ -412,7 +415,7 @@ class MainCommandLine extends CommandLine{
 			case 4:
 				Project.commandLine=new DragonCommandLine();
 				break;
-			case 5:											//need to implement this
+			case 5:											//need to implement this; probably works
 				break;
 		}
 	}
