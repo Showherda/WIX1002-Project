@@ -1,4 +1,18 @@
-import java.util.*;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Project;
+
+import java.util.Random;
+import java.util.Scanner;
+
+/**
+ *
+ * @author User
+ */
+
+    import java.util.*;
 import java.lang.*;
 
 abstract class SameBehavior{
@@ -231,14 +245,11 @@ class Tax{
 
 class Season{
 	public String name;
-	public Season(String name){
-		this.name=name;
-	}
 }
 
 class Spring extends Season{
+	public String name="Spring";
 	public Spring(){
-		super("Spring");
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
 		if (event==0){
@@ -250,17 +261,17 @@ class Spring extends Season{
 			Project.gameTime.event="Visitors arrived! You get 100 gold!";
 		}
 		else{
-			Project.citizen.berserk+=50;
-			Project.citizen.diligent+=50;
-			Project.citizen.fearless+=50;
+			Project.citizen.increaseBerserk();
+			Project.citizen.increaseDiligent();
+			Project.citizen.increaseFearless();
 			Project.gameTime.event="Festival! Citizen's Berserk, Diligent and Fearless point increased by 50!";
 		}
 	}
 }
 
 class Summer extends Season{
+	public String name="Summer";
 	public Summer(){
-		super("Summer");
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
 		if (event==0){
@@ -268,23 +279,23 @@ class Summer extends Season{
 			Project.gameTime.event="Drought! Wall's HealthPoint decreased by 50!";
 		}
 		else if (event==1){
-			Project.citizen.berserk+=50;
-			Project.citizen.diligent+=50;
-			Project.citizen.fearless+=50;
+			Project.citizen.increaseBerserk();
+			Project.citizen.increaseDiligent();
+			Project.citizen.increaseFearless();
 			Project.gameTime.event="Outing! Citizen's Berserk, Diligent and Fearless point increased by 50!";
 		}
 		else{
-			Project.citizen.emotional+=50;
-			Project.citizen.nervous+=50;
-			Project.citizen.lazy+=50;
+			Project.citizen.increaseEmotional();
+			Project.citizen.increaseNervous();
+			Project.citizen.increaseLazy();
 			Project.gameTime.event="Heatstroke! Citizen's Emotional, Nervous and Lazy point increased by 50!";
 		}
 	}
 }
 
 class Autumn extends Season{
+	public String name="Autumn";
 	public Autumn(){
-		super("Autumn");
 		Random rnd=new Random();
 		int event=rnd.nextInt(3);
 		if (event==0){
@@ -304,8 +315,8 @@ class Autumn extends Season{
 }
 
 class Winter extends Season{
+	public String name="Winter";
 	public Winter(){
-		super("Winter");
 		Random rnd=new Random();
 		int event=rnd.nextInt(4);
 		if (event==0){
@@ -313,9 +324,9 @@ class Winter extends Season{
 			Project.gameTime.event="Blizzard! Wall's HealthPoint decreased by 50!";
 		}
 		else if (event==1){
-			Project.citizen.emotional+=50;
-			Project.citizen.nervous=50;
-			Project.citizen.lazy+=50;
+			Project.citizen.increaseEmotional();
+			Project.citizen.increaseNervous();
+			Project.citizen.increaseLazy();
 			Project.gameTime.event="Avalanche! Citizen's Emotional, Nervous and Lazy point increased by 50!";
 		}
 		else if (event==2){
@@ -357,9 +368,6 @@ class GameTime{
 				this.season=new Winter();
 				break;
 		}
-
-		if (Project.temporaryAccurcyPercentageFlag)
-			Project.tower.accuracyPercentage+=20;
 	}
 
 	public void displayInfo(){
@@ -389,17 +397,11 @@ class MainCommandLine extends CommandLine{
 		int command;
 		String tmp;
 		while (true){
+			tmp=scanner.next();
 			if (scanner.hasNextInt()){
-				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=5)
-					break;
-				else
-					System.out.println("Enter an integer between 1 and 5");
-			}
-			else{
-				tmp=scanner.next();
-				System.out.println("Enter an integer between 1 and 5");
+					break;	
 			}
 		}
 		switch (command){
@@ -415,7 +417,7 @@ class MainCommandLine extends CommandLine{
 			case 4:
 				Project.commandLine=new DragonCommandLine();
 				break;
-			case 5:											//need to implement this; probably works
+			case 5:											//need to implement this
 				break;
 		}
 	}
@@ -437,33 +439,23 @@ class TowerCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
-		String tmp;
 		while (true){
+			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
-				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=4)
-					break;
-				else
-					System.out.println("Enter an integer between 1 and 4");
-			}
-			else{
-				tmp=scanner.next();
-				System.out.println("Enter an integer between 1 and 4");
+					break;	
 			}
 		}
 		switch (command){
 			case 1:
 				Project.tower.increaseAttackPoint();
-				Project.commandLine=new TowerCommandLine();
 				break;
 			case 2:
 				Project.tower.increaseCriticalChancePercentage();
-				Project.commandLine=new TowerCommandLine();
 				break;
 			case 3:
 				Project.tower.increaseAccuracyPercentage();
-				Project.commandLine=new TowerCommandLine();
 				break;
 			case 4:
 				Project.commandLine=new MainCommandLine();
@@ -482,19 +474,12 @@ class DragonCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
-		String tmp;
 		while (true){
+			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
-				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command==1)
 					Project.commandLine=new MainCommandLine();
-				else
-					System.out.println("Enter 1");
-			}
-			else{
-				tmp=scanner.next();
-				System.out.println("Enter 1");
 			}
 		}
 	}
@@ -514,29 +499,20 @@ class WallCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
-		String tmp;
 		while (true){
+			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
-				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=3)
-					break;
-				else
-					System.out.println("Enter an integer between 1 and 5");
-			}
-			else{
-				tmp=scanner.next();
-				System.out.println("Enter an integer between 1 and 3");
+					break;	
 			}
 		}
 		switch (command){
 			case 1:
 				Project.wall.increaseHealthPoint();
-				Project.commandLine=new WallCommandLine();
 				break;
 			case 2:
 				Project.wall.increaseBlockPercentage();
-				Project.commandLine=new WallCommandLine();
 				break;
 			case 3:
 				Project.commandLine=new MainCommandLine();
@@ -566,45 +542,32 @@ class CitizenCommandLine extends CommandLine{
 
 		Scanner scanner=new Scanner(System.in);
 		int command;
-		String tmp;
 		while (true){
+			String tmp=scanner.next();
 			if (scanner.hasNextInt()){
-				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
 				if (command>=1 && command <=7)
-					break;
-				else
-					System.out.println("Enter an integer between 1 and 5");
-			}
-			else{
-				tmp=scanner.next();
-				System.out.println("Enter an integer between 1 and 7");
+					break;	
 			}
 		}
 		switch (command){
 			case 1:
 				Project.citizen.decreaseEmotional();
-				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 2:
 				Project.citizen.decreaseNervous();
-				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 3:
 				Project.citizen.decreaseLazy();
-				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 4:
 				Project.citizen.increaseBerserk();
-				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 5:
 				Project.citizen.increaseDiligent();
-				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 6:
 				Project.citizen.increaseFearless();
-				Project.commandLine=new CitizenCommandLine();
 				break;
 			case 7:
 				Project.commandLine=new MainCommandLine();
@@ -625,17 +588,16 @@ public class Project{
 	public static CommandLine commandLine;
 
 	public static void game(){
-		tax.collectTax();
 		gameTime.updateGameTime();
 		dragon.displayInfo();
 		commandLine=new MainCommandLine();
-		int cnt=1;
+		int cnt=0;
 
 		while (true){
 			if (cnt%20==0){
 				tax.collectTax();
 				gameTime.updateGameTime();
-				commandLine=new MainCommandLine();
+				commandLine=new CommandLine();
 			}
 			checkStatus();
 			if (cnt%2==0)
@@ -667,8 +629,16 @@ public class Project{
 	}
 
 	public static void main(String[] args){
+            
+                musicPlayerForm musicPlayerForm = new musicPlayerForm();
+                musicPlayerForm.setVisible(true);
+                musicPlayerForm.setSize(737,470);
+                musicPlayerForm.setLocationRelativeTo(null);
+                
 		System.out.println("Welcome to Till The End - A tower Defense Game!");
 		System.out.println("A dragon performs a sudden attack to your city!");
 		game();
+                
 	}
 }
+
