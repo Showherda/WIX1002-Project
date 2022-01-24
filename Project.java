@@ -2,19 +2,19 @@ import java.util.*;
 import java.lang.*;
 
 abstract class SameBehavior{
-	public int attackPoint;
-	public int criticalChancePercentage;
-	public int accuracyPercentage=80;
+	protected int attackPoint;
+	protected int criticalChancePercentage;
+	protected int accuracyPercentage=80;
 
 	abstract public void increaseCriticalChancePercentage();
 	abstract public void attack();
 }
 
 class Dragon extends SameBehavior{
-	public int level=1;
-	public int healthPoint=100;
-	public int attackPoint=7;
-	public int criticalChancePercentage=20;
+	protected int level=1;
+	protected int healthPoint=100;
+	protected int attackPoint=7;
+	protected int criticalChancePercentage=20;
 
 	public void increaseCriticalChancePercentage(){
 		if (this.criticalChancePercentage<50)
@@ -62,8 +62,8 @@ class Dragon extends SameBehavior{
 }
 
 class Tower extends SameBehavior{
-	public int attackPoint=5;
-	public int criticalChancePercentage=10;
+	protected int attackPoint=5;
+	protected int criticalChancePercentage=10;
 
 	public void increaseAttackPoint(){
 		if (Project.gold>=100){
@@ -111,8 +111,8 @@ class Tower extends SameBehavior{
 }
 
 class Wall{
-	public int healthPoint=100;
-	public int blockPercentage=10;
+	protected int healthPoint=100;
+	protected int blockPercentage=10;
 
 	public void increaseHealthPoint(){
 		if (Project.gold>=100){
@@ -133,12 +133,12 @@ class Wall{
 }
 
 class Citizen{
-	public int emotional=10;
-	public int nervous=10;
-	public int lazy=10;
-	public int berserk=10;
-	public int diligent=10;
-	public int fearless=10;
+	protected int emotional=10;
+	protected int nervous=10;
+	protected int lazy=10;
+	protected int berserk=10;
+	protected int diligent=10;
+	protected int fearless=10;
 
 	public void decreaseEmotional(){
 		if(this.emotional>=50 && Project.gold>=50){
@@ -220,17 +220,21 @@ class Citizen{
 }
 
 class Tax{
-	public int taxCollected;
+	protected int taxCollected;
 
 	public void collectTax(){
 		Random rnd=new Random();
-		this.taxCollected=new int[] {200,250,300,350,400}[rnd.nextInt(5)];
+		if (Project.hardMode)
+			this.taxCollected=new int[] {150,200,250,300,350}[rnd.nextInt(5)];
+		else
+			this.taxCollected=new int[] {200,250,300,350,400}[rnd.nextInt(5)];
 		Project.gold+=taxCollected;
 	}
 }
 
 class Season{
-	public String name;
+	protected String name;
+	
 	public Season(String name){
 		this.name=name;
 	}
@@ -351,10 +355,10 @@ class Winter extends Season{
 }
 
 class GameTime{
-	public int year=1;
-	public int seasonNum=-1;
-	public String event;
-	public Season season;
+	protected int year=1;
+	protected int seasonNum=-1;
+	protected String event;
+	protected Season season;
 
 	public void updateGameTime(){
 		if (this.seasonNum==3){
@@ -402,7 +406,8 @@ class MainCommandLine extends CommandLine{
 		System.out.println("2: Wall");
 		System.out.println("3: Citizens");
 		System.out.println("4: Dragon");
-		System.out.println("5: I am all ready!");
+		System.out.println("5: Go for hard mode");
+		System.out.println("6: I am all ready!");
 		System.out.println("Please enter your command: ");
 
 		Scanner scanner=new Scanner(System.in);
@@ -412,14 +417,14 @@ class MainCommandLine extends CommandLine{
 			if (scanner.hasNextInt()){
 				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
-				if (command>=1 && command <=5)
+				if (command>=1 && command <=7)
 					break;
 				else
-					System.out.println("Enter an integer between 1 and 5");
+					System.out.println("Enter an integer between 1 and 7");
 			}
 			else{
 				tmp=scanner.next();
-				System.out.println("Enter an integer between 1 and 5");
+				System.out.println("Enter an integer between 1 and 7");
 			}
 		}
 		switch (command){
@@ -435,9 +440,25 @@ class MainCommandLine extends CommandLine{
 			case 4:
 				Project.commandLine=new DragonCommandLine();
 				break;
-			case 5:											//need to implement this; probably works
+			case 5:
+				Project.hardMode=true;
+				Project.dragon.attackPoint+=2;
+				Project.dragon.accuracyPercentage+=5;
+				Project.dragon.criticalChancePercentage+=5;
+				Project.commandLine=new MainCommandLine();
+				break;
+			case 6:
+				Project.commandLine=new SaveAndLoadCommandLine();
+				break;
+			case 7:											//need to implement this; probably works
 				break;
 		}
+	}
+}
+
+class SaveAndLoadCommandLine extends CommandLine{
+	public SaveAndLoadCommandLine(){
+		
 	}
 }
 
@@ -636,15 +657,16 @@ class CitizenCommandLine extends CommandLine{
 }
 
 public class Project{
-	public static Tower tower=new Tower();
-	public static Wall wall=new Wall();
-	public static Citizen citizen=new Citizen();
-	public static Dragon dragon=new Dragon();
-	public static boolean temporaryAccurcyPercentageFlag=false;
-	public static Tax tax=new Tax();
-	public static GameTime gameTime=new GameTime();
-	public static int gold=200;
-	public static CommandLine commandLine;
+	protected static Tower tower=new Tower();
+	protected static Wall wall=new Wall();
+	protected static Citizen citizen=new Citizen();
+	protected static Dragon dragon=new Dragon();
+	protected static boolean temporaryAccurcyPercentageFlag=false;
+	protected static boolean hardMode=false;
+	protected static Tax tax=new Tax();
+	protected static GameTime gameTime=new GameTime();
+	protected static int gold=200;
+	protected static CommandLine commandLine;
 
 	public static void game(){
 		tax.collectTax();
