@@ -369,7 +369,7 @@ class GameTime{
 			this.seasonNum+=1;
 		switch (this.seasonNum){
 			case 0:
-				this.season=new Winter();//Spring();
+				this.season=new Spring();
 				break;
 			case 1:
 				this.season=new Summer();
@@ -673,7 +673,7 @@ public class Project{
 				commandLine=new MainCommandLine();
 			}
 			checkStatus();
-			if (cnt%2==0)
+			if (cnt%2==1)
 				dragon.attack();
 			else
 				tower.attack();
