@@ -417,14 +417,14 @@ class MainCommandLine extends CommandLine{
 			if (scanner.hasNextInt()){
 				tmp=scanner.next();
 				command=Integer.parseInt(tmp);
-				if (command>=1 && command <=7)
+				if (command>=1 && command <=6)
 					break;
 				else
-					System.out.println("Enter an integer between 1 and 7");
+					System.out.println("Enter an integer between 1 and 6");
 			}
 			else{
 				tmp=scanner.next();
-				System.out.println("Enter an integer between 1 and 7");
+				System.out.println("Enter an integer between 1 and 6");
 			}
 		}
 		switch (command){
@@ -448,17 +448,8 @@ class MainCommandLine extends CommandLine{
 				Project.commandLine=new MainCommandLine();
 				break;
 			case 6:
-				Project.commandLine=new SaveAndLoadCommandLine();
-				break;
-			case 7:											//need to implement this; probably works
 				break;
 		}
-	}
-}
-
-class SaveAndLoadCommandLine extends CommandLine{
-	public SaveAndLoadCommandLine(){
-		
 	}
 }
 
